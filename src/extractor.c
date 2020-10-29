@@ -95,6 +95,19 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     );
   }
 
+  /* Destroy the data array */
+  for (i = 0; i < data->len; i++)
+  {
+    free((data->arr)[i]->plugin_name);
+    free((data->arr)[i]->type);
+    free((data->arr)[i]->mime_type);
+    free((data->arr)[i]->data);
+
+    free((data->arr)[i]);
+  }
+  free(data->arr);
+  free(data);
+
   return enif_make_list_from_array(env, list, data->len);
 }
 
