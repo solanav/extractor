@@ -1,26 +1,18 @@
 MIX = mix
-CFLAGS = -g -O3 -ansi -pedantic -Wall -Wextra -Wno-unused-parameter
+CFLAGS = -g -O3 -ansi -pedantic -Wall -Wextra -Wno-unused-parameter -fPIC
 
 ERLANG_PATH = $(shell erl -eval 'io:format("~s", [lists:concat([code:root_dir(), "/erts-", erlang:system_info(version), "/include"])])' -s init stop -noshell)
 CFLAGS += -I$(ERLANG_PATH)
 
 EXTRACTOR_PATH = /usr/lib/x86_64-linux-gnu
 
-ifeq ($(wildcard deps/hoedown),)
-	HOEDOWN_PATH = ../hoedown
+ifeq ($(wildcard deps/extractor),)
+	SELF_PATH = ../extractor
 else
-	HOEDOWN_PATH = deps/hoedown
+	SELF_PATH = deps/extractor
 endif
 
-CFLAGS += -I$(HOEDOWN_PATH)/src -ldl
-
-ifneq ($(OS),Windows_NT)
-	CFLAGS += -fPIC
-
-	ifeq ($(shell uname),Darwin)
-		LDFLAGS += -dynamiclib -undefined dynamic_lookup
-	endif
-endif
+CFLAGS += -I$(EXTRACTOR_PATH)/src -ldl
 
 .PHONY: all extractor clean
 
@@ -30,10 +22,9 @@ extractor:
 	$(MIX) compile
 
 priv/extractor.so: src/extractor.c
-	$(MAKE) -C $(HOEDOWN_PATH) libhoedown.a
-	$(CC) $(CFLAGS) -shared $(LDFLAGS) -o $@ src/extractor.c $(HOEDOWN_PATH)/libhoedown.a $(EXTRACTOR_PATH)/libextractor.so
+	$(CC) $(CFLAGS) -shared $(LDFLAGS) -o $@ src/extractor.c $(EXTRACTOR_PATH)/libextractor.so
 
 clean:
 	$(MIX) clean
-	$(MAKE) -C $(HOEDOWN_PATH) clean
+	$(MAKE) -C $(SELF_PATH) clean
 	$(RM) priv/extractor.so
