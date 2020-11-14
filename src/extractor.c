@@ -159,28 +159,24 @@ static ErlNifFunc funcs[] = {
 
 static int
 load(ErlNifEnv* env, void** priv, ERL_NIF_TERM info) {
-  printf("LOADING\n\r");
   *priv = (void *) EXTRACTOR_plugin_add_defaults(EXTRACTOR_OPTION_DEFAULT_POLICY);
   return 0;
 }
 
 static int
 reload(ErlNifEnv* env, void** priv, ERL_NIF_TERM info) {
-  printf("RELOADING\n\r");
   *priv = (void *) EXTRACTOR_plugin_add_defaults(EXTRACTOR_OPTION_DEFAULT_POLICY);
   return 0;
 }
 
 static int
 upgrade(ErlNifEnv* env, void** priv, void** old_priv, ERL_NIF_TERM info) {
-  printf("UPGRADING\n\r");
   *priv = (void *) EXTRACTOR_plugin_add_defaults(EXTRACTOR_OPTION_DEFAULT_POLICY);
   return load(env, priv, info);
 }
 
 static void
 unload(ErlNifEnv* env, void* priv) {
-  printf("UNLOADING\n\r");
   EXTRACTOR_plugin_remove_all((struct EXTRACTOR_PluginList *) priv);
 }
 
