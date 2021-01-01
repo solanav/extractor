@@ -10,12 +10,12 @@ defmodule Extractor do
 
   app = Mix.Project.config[:app]
 
-  def decompress(file_name, @zip_magic  <> rest) do
+  def decompress(_file_name, @zip_magic  <> rest) do
     # Decompress ZIP file
     :zip.unzip(@zip_magic  <> rest, [:memory])
   end
 
-  def decompress(file_name, <<header::2056>> <> @tar_magic <> rest) do
+  def decompress(_file_name, <<header::2056>> <> @tar_magic <> rest) do
     # Decompress tar and tar.gz files
     :erl_tar.extract({:binary, <<header::2056>> <> @tar_magic <> rest}, [:compressed, :memory])
   end
@@ -28,7 +28,7 @@ defmodule Extractor do
     end
   end
 
-  def decompress(file_name, buffer) do
+  def decompress(_file_name, _buffer) do
     {:error, []}
   end
 
@@ -41,9 +41,9 @@ defmodule Extractor do
     end
   end
 
-  def flat_extract(buffer, options \\ []) do
+  def flat_extract(buffer, _options \\ []) do
     flat_extract_aux("unknown", buffer)
-    |> Enum.map(fn {file_name, file} -> extract(file, []) end)
+    |> Enum.map(fn {_file_name, file} -> extract(file, []) end)
   end
 
   def init do

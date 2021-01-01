@@ -64,6 +64,7 @@ text_output (
 
 static ERL_NIF_TERM
 extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
+  int len;
   size_t i;
   ErlNifBinary file_bin;
   raw_data_array *data;
@@ -129,10 +130,12 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   time_taken = ((double) t) / CLOCKS_PER_SEC;
   printf("[OK] [%f]\n\r", time_taken);
 
-  /* Destroy the data array
   printf("Destroying the data array...");
   t = clock();
 
+  len = data->len;
+
+  /* Destroy the data array */
   for (i = 0; i < data->len; i++)
   {
     free((data->arr)[i]->plugin_name);
@@ -147,10 +150,9 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
   t = clock() - t;
   time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("[OK] [%f]\n\r", time_taken);
-  */
+  printf("[OK] [%f]\n\r\n\r", time_taken);
 
-  return enif_make_list_from_array(env, list, data->len);
+  return enif_make_list_from_array(env, list, len);
 }
 
 static ErlNifFunc funcs[] = {
