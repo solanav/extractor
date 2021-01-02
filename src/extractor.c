@@ -75,44 +75,20 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
   double time_taken;
 
   /* Extract the plugins */
-  printf("Extracting plugins...");
-  t = clock();
-
   plugins = (struct EXTRACTOR_PluginList *) enif_priv_data(env);
 
-  t = clock() - t;
-  time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("[OK] [%f]\n\r", time_taken);
-
   /* Read file binary */
-  printf("Reading file binary...");
-  t = clock();
-
   if (enif_inspect_binary(env, argv[0], &file_bin) == 0) {
     return enif_make_badarg(env);
   }
 
-  t = clock() - t;
-  time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("[OK] [%f]\n\r", time_taken);
-
   /* Extract the data */
-  printf("Extracting the data...");
-  t = clock();
-
   data = calloc(1, sizeof(raw_data_array));
   data->arr = NULL;
   data->len = 0;
   EXTRACTOR_extract(plugins, NULL, file_bin.data, file_bin.size, &text_output, (void *) data);
 
-  t = clock() - t;
-  time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("[OK] [%f]\n\r", time_taken);
-
   /* Create list of data */
-  printf("Creating list of data...");
-  t = clock();
-
   list = calloc(data->len, sizeof(ERL_NIF_TERM));
   for (i = 0; i < data->len; i++)
   {
@@ -126,16 +102,8 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     );
   }
 
-  t = clock() - t;
-  time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("[OK] [%f]\n\r", time_taken);
-
-  printf("Destroying the data array...");
-  t = clock();
-
+  /* Destroy the data array */
   len = data->len;
-
-  /* Destroy the data array 
   for (i = 0; i < data->len; i++)
   {
     free((data->arr)[i]->plugin_name);
@@ -146,13 +114,12 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     free((data->arr)[i]);
   }
   free(data->arr);
-  free(data);*/
+  free(data);
 
-  t = clock() - t;
-  time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("[OK] [%f]\n\r\n\r", time_taken);
+  ERL_NIF_TERM res = enif_make_list_from_array(env, list, len);
+  free(list);
 
-  return enif_make_list_from_array(env, list, len);
+  return res;
 }
 
 static ErlNifFunc funcs[] = {
