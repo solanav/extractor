@@ -135,7 +135,7 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
 
   len = data->len;
 
-  /* Destroy the data array */
+  /* Destroy the data array 
   for (i = 0; i < data->len; i++)
   {
     free((data->arr)[i]->plugin_name);
@@ -146,7 +146,7 @@ extract(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) {
     free((data->arr)[i]);
   }
   free(data->arr);
-  free(data);
+  free(data);*/
 
   t = clock() - t;
   time_taken = ((double) t) / CLOCKS_PER_SEC;

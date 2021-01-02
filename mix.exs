@@ -29,6 +29,8 @@ defmodule Extractor.Mixfile do
   end
 
   defp deps do
-    []
+    [
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+    ]
   end
 end
