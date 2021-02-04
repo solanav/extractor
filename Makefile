@@ -4,7 +4,9 @@ CFLAGS = -g -O3 -ansi -pedantic -Wall -Wextra -Wno-unused-parameter -fPIC
 ERLANG_PATH = $(shell erl -eval 'io:format("~s", [lists:concat([code:root_dir(), "/erts-", erlang:system_info(version), "/include"])])' -s init stop -noshell)
 CFLAGS += -I$(ERLANG_PATH)
 
-EXTRACTOR_PATH = /usr/lib/x86_64-linux-gnu
+ifeq ($(EXTRACTOR_PATH),)
+	EXTRACTOR_PATH := /usr/lib/x86_64-linux-gnu
+endif
 
 ifeq ($(wildcard deps/extractor),)
 	SELF_PATH = ../extractor
