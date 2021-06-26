@@ -20,7 +20,7 @@ typedef struct {
   size_t len;  
 } raw_data_array;
 
-_EXTRACTOR_EXTERN int
+/*_EXTRACTOR_EXTERN*/ int
 text_output (
   void *handle,
   const char *plugin_name,
