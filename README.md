@@ -2,7 +2,7 @@
 
 A simple Elixir metadata extractor for many types of files.
 
-Implemented entirely as a [NIF][2] binding to the [libextractor][2] library.
+Implemented entirely as a [NIF][1] binding to the [libextractor][2] library.
 
 Currently only working on linux. Should be easy to adapt to windows tho.
 
