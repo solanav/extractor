@@ -21,7 +21,24 @@ defmodule Extractor.Mixfile do
      version: @version,
      elixir: ">= 0.14.3 and < 2.0.0",
      compilers: [:extractor, :elixir, :app],
+     description: description(),
+     package: package(),
      deps: deps()]
+  end
+
+  defp description do
+    """
+    Krptkn, pronounced /kroh-pot-kin/, is a metadata extraction framework for websites. It contains a spider, metadata extractor, metadata analyzer and report generator.
+    """
+  end
+
+  defp package do
+    [
+      files: ["lib", "src", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Antonio Solana"],
+      licenses: ["AGPL"],
+      links: %{"GitHub" => "https://github.com/solanav/krptkn"}
+    ]
   end
 
   def application do
